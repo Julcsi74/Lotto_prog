@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import Axios from 'axios';
 
+Axios.defaults.timeout = 2000;
+
 
 const Operator = () => {
 
@@ -135,7 +137,7 @@ const Operator = () => {
         handleSubmit2();
          setTimeout(() => {
              window.location.reload();
-           }, 50);
+           }, 2000);
 
     }
 
