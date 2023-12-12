@@ -227,20 +227,24 @@ app.post('/api/createnewcupon', (req,res)=> {
 })
 
 // Bot cupon insert
-app.post('/api/createnewbotcupon', (req,res)=> {   
+app.post('/api/createnewbotcupon', (req, res) => {
     const lotnum1 = req.body.num1;
     const lotnum2 = req.body.num2;
     const lotnum3 = req.body.num3;
     const lotnum4 = req.body.num4;
     const lotnum5 = req.body.num5;
-    db.query("INSERT INTO bot_cupons (lotnum1, lotnum2, lotnum3, lotnum4, lotnum5) VALUES (?,?,?,?,?)",[lotnum1,lotnum2,lotnum3,lotnum4,lotnum5], (err,result)=>{
-    if(err) {
-       console.log(err)
-    } 
-    console.log(result)
-    });   
-})
+    db.query("INSERT INTO bot_cupons (lotnum1, lotnum2, lotnum3, lotnum4, lotnum5) VALUES (?,?,?,?,?)", [lotnum1, lotnum2, lotnum3, lotnum4, lotnum5], (err, result) => {
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
 
+    });
+})
 
 // Cuponlist send
 app.get("/api/cuponlist", (req,res)=>{
