@@ -15,6 +15,7 @@ const Operator = () => {
 	const [operatorCoins, setoperatorCoins] = useState(0);
 	const [weekgameCoins, setWeekgameCoins] = useState(0);
     const [curentweeek, setCurentweeek] = useState(0);
+    const [reloadflag, setReloadflag] = useState(0);
     const [listItems, setListItems] = useState(null);
 
     const botplayer = useRef(null)
@@ -22,6 +23,8 @@ const Operator = () => {
 
     let usercontainer = [];
     let botcontainer = [];
+
+    
 
     let playtwohits = 0;
     let playthreehits = 0;
@@ -56,7 +59,6 @@ const Operator = () => {
 	//useEffect with weekcoin
 	useEffect(()=>{
 		Axios.get("http://localhost:3002/api/weekcoins").then((coin)=>{
-            console.log(coin);
 			setWeekgameCoins(coin.data[0].weekcoins)
 		});
 	},[weekgameCoins.length])
@@ -68,13 +70,12 @@ const Operator = () => {
 		});
 	},[curentweeek.length])
 
-    //useEffect with database cupons
+    //useEffect with curentweek
 	useEffect(()=>{
-        Axios.get("http://localhost:3002/api/cuponlist").then((datas)=>{
-            setCupList(datas.data)
-        });
-    },[cupList.length])
-
+		Axios.get("http://localhost:3002/api/loadflag").then((loads)=>{
+			setReloadflag(loads.data[0].loads)
+		});
+	},[reloadflag.length])
 
     //useEffect with database cupons
 	useEffect(()=>{
@@ -82,16 +83,24 @@ const Operator = () => {
             setBotcupList(datas.data)
         });
     },[botcupList.length])
+    
+    //useEffect with database cupons
+	useEffect(()=>{
+        Axios.get("http://localhost:3002/api/cuponlist").then((datas)=>{
+            setCupList(datas.data)
+        });
+    },[cupList.length])
 
     
     //useEffect with database winernum
-    
-	    useEffect(()=>{
-            if(curentweeek==1){
+    console.log(reloadflag);
+    useEffect(()=>{
+            if(curentweeek == 1 && reloadflag == 1){
+                console.log("alma");
             Axios.get("http://localhost:3002/api/winernumlist").then((datas)=>{
                 setWinernumbersList(datas.data)
             })};
-        },[winernumbersList])
+        },[reloadflag])
     
 
     function generator(){      
@@ -113,10 +122,11 @@ const Operator = () => {
     }
 
     function winnumsend(){
-        let winernumbers = generator();
+        winer_numbers = generator();
+        //winer_numbers = winernumbers;
         const handleSubmit1 = async () => {
             try {
-                const response = await Axios.post("http://localhost:3002/api/winernum", {num1: winernumbers[0], num2: winernumbers[1], num3: winernumbers[2], num4: winernumbers[3], num5: winernumbers[4],}); 
+                const response = await Axios.post("http://localhost:3002/api/winernum", {num1: winer_numbers[0], num2: winer_numbers[1], num3: winer_numbers[2], num4: winer_numbers[3], num5: winer_numbers[4],}); 
                 console.log(response);
                 return true;
             } catch (error) {
@@ -139,8 +149,25 @@ const Operator = () => {
             }
         };
         Axios.get("http://localhost:3002/api/weeknum").then((weeks)=>{
-            console.log(weeks);
 			setCurentweeek(weeks.data[0].week)
+		});
+        handleSubmit1();
+    }
+
+    function reloadsend(){
+        const handleSubmit1 = async () => {
+            try {
+                const response = await Axios.post("http://localhost:3002/api/loadflagupd"); 
+                console.log(response);
+                return true;
+            } catch (error) {
+                console.log(error);
+                return false
+            }
+        };
+        Axios.get("http://localhost:3002/api/loadflag").then((loads)=>{
+            console.log(loads);
+			setReloadflag(loads.data[0].loads)
 		});
         handleSubmit1();
     }
@@ -210,22 +237,16 @@ const Operator = () => {
 		botcupList[i].lotnum3, botcupList[i].lotnum4, botcupList[i].lotnum5]];
 	}
     
-    function winnumreceive(){
-        console.log(winernumbersList);
-                // winer_numbers = [...winer_numbers ,[winnum.data[0].lotnum1, winnum.data[0].lotnum2,
-                //     winnum.data[0].lotnum3, winnum.data[0].lotnum4, winnum.data[0].lotnum5]];
-        
-    }
+
+    if(curentweeek==1 && reloadflag == 1 && winernumbersList.length>0){      
+            winer_numbers = [...winer_numbers ,[winernumbersList[0].lotnum1, winernumbersList[0].lotnum2, winernumbersList[0].lotnum3, winernumbersList[0].lotnum4, winernumbersList[0].lotnum5]];
+        }
 
 
     function lottoLottery(){
         winnumsend();
-        
+        reloadsend();
         weeknumsend();
-
-        winnumreceive();
-        console.log(winer_numbers);
-
         hitssum();
 
         gamercupon();
@@ -233,7 +254,12 @@ const Operator = () => {
 
         gamerprize();
         botprize();
+        setTimeout(() => {
+            window.location.reload();
+          }, 50);
     }
+
+    
 
     function hitssum(){
         let hitsBase = weekgameCoins*0.9;
@@ -242,8 +268,6 @@ const Operator = () => {
         let threeHits = parseInt(hitsBase*0.15);
         let twoHits = parseInt(hitsBase*0.05);
         let totalHits = fiveHits+foorHits+threeHits+twoHits;
-        console.log(twoHits);
-        console.log(totalHits);
         const handleSubmit1 = async () => {
 			try {
 			    const response = await Axios.post("http://localhost:3002/api/createwinerhits", {fivehits: fiveHits, foorhits: foorHits, threehits: threeHits, twohits: twoHits, totalhits: totalHits,});

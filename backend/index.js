@@ -13,7 +13,6 @@ app.use(express.json())
 //Setnewgame
 
 
-
 app.get("/api/setdefault", (req,res)=>{
     let sql_string = "DELETE FROM week_coins;";
     sql_string += "DELETE FROM user_cupons;";
@@ -22,11 +21,13 @@ app.get("/api/setdefault", (req,res)=>{
     sql_string += "DELETE FROM user_coins;";
     sql_string += "DELETE FROM bot_cupons;";
     sql_string += "DELETE FROM curen_week;";
+    sql_string += "DELETE FROM load_flag;";
     sql_string += "DELETE FROM winer_num;";
     sql_string += "INSERT INTO user_coins (usercoins) VALUES (10000);";
     sql_string += "INSERT INTO operator_coins (operatorcoins) VALUES (0);";
     sql_string += "INSERT INTO week_coins (weekcoins) VALUES (0);";
     sql_string += "INSERT INTO curen_week (week) VALUES (0);";
+    sql_string += "INSERT INTO load_flag (loads) VALUES (0);";
     db.query(sql_string, (err,result)=>{
         if (err) {
             console.log(err)
@@ -342,6 +343,16 @@ app.get("/api/weeknum", (req,res)=>{
     });   
 });
 
+// Cuponlist send
+app.get("/api/loadflag", (req,res)=>{
+    db.query("SELECT * FROM load_flag", (err,result)=>{
+        if(err) {
+            console.log(err)
+        } 
+        res.send(result)
+    });   
+});
+
 // Route to get one post
 app.get("/api/getFromId/:id", (req,res)=>{
 const id = req.params.id;
@@ -354,9 +365,23 @@ const id = req.params.id;
     );   
     });
 
-    // Update weeknum
+// Update weeknum
 app.post('/api/weeknumupd',(req,res)=>{
     db.query("UPDATE curen_week SET week = 1 WHERE week = 0", (err,result)=>{
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
+})
+
+// Update loadflag
+app.post('/api/loadflagupd',(req,res)=>{
+    db.query("UPDATE load_flag SET loads = 1 WHERE loads = 0", (err,result)=>{
         if (err) {
             console.log(err)
             res.send("Error")

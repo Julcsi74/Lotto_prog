@@ -10,6 +10,7 @@ const Gamer = () => {
 	const [playerCoins, setplayerCoins] = useState(0);
 	const [operatorCoins, setoperatorCoins] = useState(0);
 	const [weekgameCoins, setWeekgameCoins] = useState(0);
+	const [curentweeek, setCurentweeek] = useState(0);
 
 	//Change container
 	const [data, setData] = useState([]);
@@ -63,6 +64,13 @@ const Gamer = () => {
 		setCupList(datas.data)
 	});
 	},[cupList.length])
+
+	//useEffect with curentweek
+	useEffect(()=>{
+		Axios.get("http://localhost:3002/api/weeknum").then((weeks)=>{
+			setCurentweeek(weeks.data[0].week)
+		});
+	},[curentweeek.length])
 
 	//Generate sections arrey
 	for (let i=0; i<cupList.length; i++) {	
@@ -160,20 +168,21 @@ const Gamer = () => {
 				Player name:
 				{playerName}
 			</h1>
-
+			{curentweeek==0 ? (<p></p>):(<button  /*onClick={lottoLottery}*/>New week</button>)}
 			<h1>
 				Player coins:
 				{playerCoins}
 			</h1>
+			
 			<h1>
 			 {fault} 
 			</h1>
-			<input  ref={inputNumber1} placeholder='Please the first number'></input>
-			<input  ref={inputNumber2} placeholder='Please the second number'></input>
-			<input  ref={inputNumber3} placeholder='Please the third number'></input>
-			<input  ref={inputNumber4} placeholder='Please the fourth number'></input>
-			<input  ref={inputNumber5} placeholder='Please the fifth number'></input>
-			<button onClick={setcoupon}>Lottery ticket posting</button>
+			{curentweeek==0 ? (<input  ref={inputNumber1} placeholder='Please the first number'></input>):(<p></p>)}
+			{curentweeek==0 ? (<input  ref={inputNumber2} placeholder='Please the second number'></input>):(<p></p>)}
+			{curentweeek==0 ? (<input  ref={inputNumber3} placeholder='Please the third number'></input>):(<p></p>)}
+			{curentweeek==0 ? (<input  ref={inputNumber4} placeholder='Please the fourth number'></input>):(<p></p>)}
+			{curentweeek==0 ? (<input  ref={inputNumber5} placeholder='Please the fifth number'></input>):(<p></p>)}
+			{curentweeek==0 ? (<button onClick={setcoupon}>Lottery ticket posting</button>):(<p></p>)}
 			<h1>
 				Numbers:
 
