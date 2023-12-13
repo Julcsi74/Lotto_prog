@@ -27,7 +27,6 @@ app.get("/api/setdefault", (req,res)=>{
     sql_string += "INSERT INTO operator_coins (operatorcoins) VALUES (0);";
     sql_string += "INSERT INTO week_coins (weekcoins) VALUES (0);";
     sql_string += "INSERT INTO curen_week (week) VALUES (0);";
-    sql_string += "INSERT INTO winer_hits (twohits, threehits, foorhits, fivehits) VALUES (0,0,0,0);";
     db.query(sql_string, (err,result)=>{
         if (err) {
             console.log(err)
@@ -145,19 +144,6 @@ app.post('/api/defaultweekcoins', (req,res)=> {
     });
 })
 
-// Default winerhits;
-app.post('/api/defaultwinerhits', (req,res)=> {   
-    db.query("INSERT INTO winer_hits (twohits, threehits, foorhits, fivehits) VALUES (0,0,0,0)", (err,result)=>{
-        if (err) {
-            console.log(err)
-            res.send("Error")
-        }
-        else {
-            console.log(result)
-            res.send("ok")
-        }
-    });
-})
 
 // User coins
 app.get("/api/usercoint", (req,res)=>{
@@ -211,9 +197,6 @@ app.post('/api/postoperatorcoins',(req,res)=>{
     const operatorcoins = req.body.operatorcoins;
     const operation = req.body.operation;
     const value = req.body.value;
-    console.log(operatorcoins);
-    console.log(operation);
-    console.log(value); 
     db.query((operation=="-"?"UPDATE operator_coins SET operatorcoins = operatorcoins - ? WHERE operatorcoins = ?":"UPDATE operator_coins SET operatorcoins = operatorcoins + ? WHERE operatorcoins = ?"),[value,operatorcoins], (err,result)=>{
         if (err) {
             console.log(err)
@@ -230,11 +213,27 @@ app.post('/api/postoperatorcoins',(req,res)=>{
 app.post('/api/postweekcoins',(req,res)=>{
     const weekcoins = req.body.weekcoins;
     const operation = req.body.operation;
-    const value = req.body.value;
-    console.log(weekcoins);
-    console.log(operation);
-    console.log(value);    
+    const value = req.body.value;   
     db.query((operation=="-"?"UPDATE week_coins SET weekcoins = weekcoins - ? WHERE weekcoins = ?":"UPDATE week_coins SET weekcoins = weekcoins + ? WHERE weekcoins = ?"),[value,weekcoins], (err,result)=>{
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
+})
+
+// Hits insert
+app.post('/api/createwinerhits', (req,res)=> {   
+    const fiveHits = req.body.fivehits;
+    const foorHits = req.body.foorhits;
+    const threeHits = req.body.threehits;
+    const twoHits = req.body.twohits;
+    const totalHits = req.body.totalhits;
+    db.query("INSERT INTO winer_hits (twohits, threehits, foorhits, fivehits, totalhits) VALUES (?,?,?,?,?)",[twoHits,threeHits,foorHits,fiveHits,totalHits], (err,result)=>{
         if (err) {
             console.log(err)
             res.send("Error")

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2023. Dec 12. 13:43
+-- Létrehozás ideje: 2023. Dec 13. 16:23
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -35,6 +35,13 @@ CREATE TABLE `bot_cupons` (
   `lotnum5` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- A tábla adatainak kiíratása `bot_cupons`
+--
+
+INSERT INTO `bot_cupons` (`lotnum1`, `lotnum2`, `lotnum3`, `lotnum4`, `lotnum5`) VALUES
+(4, 3, 6, 25, 30);
+
 -- --------------------------------------------------------
 
 --
@@ -50,7 +57,7 @@ CREATE TABLE `operator_coins` (
 --
 
 INSERT INTO `operator_coins` (`operatorcoins`) VALUES
-(0);
+(500);
 
 -- --------------------------------------------------------
 
@@ -98,7 +105,7 @@ CREATE TABLE `week_coins` (
 --
 
 INSERT INTO `week_coins` (`weekcoins`) VALUES
-(0);
+(500);
 
 -- --------------------------------------------------------
 
@@ -110,15 +117,16 @@ CREATE TABLE `winer_hits` (
   `twohits` int(24) NOT NULL,
   `threehits` int(24) NOT NULL,
   `foorhits` int(24) NOT NULL,
-  `fivehits` int(24) NOT NULL
+  `fivehits` int(24) NOT NULL,
+  `totalhits` int(24) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- A tábla adatainak kiíratása `winer_hits`
 --
 
-INSERT INTO `winer_hits` (`twohits`, `threehits`, `foorhits`, `fivehits`) VALUES
-(0, 0, 0, 0);
+INSERT INTO `winer_hits` (`twohits`, `threehits`, `foorhits`, `fivehits`, `totalhits`) VALUES
+(22, 67, 90, 270, 449);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

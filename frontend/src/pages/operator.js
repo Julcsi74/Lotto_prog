@@ -9,7 +9,7 @@ const Operator = () => {
     //Previous sections object
 	const [cupList,setCupList] = useState([]);
     const [botcupList, setBotcupList] = useState([]);
-    const [winer_numbers, setWiner_numbers] = useState([]);
+    const [winernumbersList, setWinernumbersList] = useState([]);
 
     const [playerCoins, setplayerCoins] = useState(0);
 	const [operatorCoins, setoperatorCoins] = useState(0);
@@ -36,9 +36,8 @@ const Operator = () => {
 
     //Previous sections arrey
 	let inputCup =[];
-
-    //Previous sections arrey
 	let botCup =[];
+    let winer_numbers=[]
 
     //useEffect with usercoin
 	useEffect(()=>{
@@ -48,7 +47,7 @@ const Operator = () => {
 	},[playerCoins.length])
 
 	//useEffect with operatorcoin
-	useEffect(()=>{
+    useEffect(()=>{
 		Axios.get("http://localhost:3002/api/operatorcoins").then((coin)=>{
 			setoperatorCoins(coin.data[0].operatorcoins)
 		});
@@ -82,7 +81,18 @@ const Operator = () => {
         Axios.get("http://localhost:3002/api/botcuponlist").then((datas)=>{
             setBotcupList(datas.data)
         });
-        },[botcupList.length])
+    },[botcupList.length])
+
+    
+    //useEffect with database winernum
+    
+	    useEffect(()=>{
+            if(curentweeek==1){
+            Axios.get("http://localhost:3002/api/winernumlist").then((datas)=>{
+                setWinernumbersList(datas.data)
+            })};
+        },[winernumbersList])
+    
 
     function generator(){      
         let array= [0, 0, 0, 0, 0];
@@ -201,22 +211,51 @@ const Operator = () => {
 	}
     
     function winnumreceive(){
-        Axios.get("http://localhost:3002/api/winernumlist").then((winnum)=>{
-                setWiner_numbers([...winer_numbers,[winnum.data[0].lotnum1, winnum.data[0].lotnum2,
-                    winnum.data[0].lotnum3, winnum.data[0].lotnum4, winnum.data[0].lotnum5]]);
-                    console.log(winer_numbers);
-        });
+        console.log(winernumbersList);
+                // winer_numbers = [...winer_numbers ,[winnum.data[0].lotnum1, winnum.data[0].lotnum2,
+                //     winnum.data[0].lotnum3, winnum.data[0].lotnum4, winnum.data[0].lotnum5]];
+        
     }
 
+
     function lottoLottery(){
-        //winer_numbers = generator();
         winnumsend();
-        winnumreceive();
+        
         weeknumsend();
+
+        winnumreceive();
+        console.log(winer_numbers);
+
+        hitssum();
+
         gamercupon();
-        gamerprize();
         botcupon();
+
+        gamerprize();
         botprize();
+    }
+
+    function hitssum(){
+        let hitsBase = weekgameCoins*0.9;
+        let fiveHits = parseInt(hitsBase*0.6);
+        let foorHits = parseInt(hitsBase*0.2);
+        let threeHits = parseInt(hitsBase*0.15);
+        let twoHits = parseInt(hitsBase*0.05);
+        let totalHits = fiveHits+foorHits+threeHits+twoHits;
+        console.log(twoHits);
+        console.log(totalHits);
+        const handleSubmit1 = async () => {
+			try {
+			    const response = await Axios.post("http://localhost:3002/api/createwinerhits", {fivehits: fiveHits, foorhits: foorHits, threehits: threeHits, twohits: twoHits, totalhits: totalHits,});
+			    console.log(response);
+			} catch (error) {
+			    console.log(error);
+			}
+		};
+        handleSubmit1();
+
+
+
     }
 
     function gamercupon(){
@@ -238,7 +277,7 @@ const Operator = () => {
             let hits=0;
             for(let j=0; j<usercontainer[i].length; j++){
                 for(let k=0; k<winer_numbers.length; k++){
-                    if (usercontainer[i][j]=winer_numbers[k]){
+                    if (usercontainer[i][j]==winer_numbers[k]){
                         hits++;
                     }
                 }
@@ -256,7 +295,7 @@ const Operator = () => {
             let hits=0;
             for(let j=0; j<botcontainer[i].length; j++){
                 for(let k=0; k<winer_numbers.length; k++){
-                    if (botcontainer[i][j]=winer_numbers[k]){
+                    if (botcontainer[i][j]==winer_numbers[k]){
                         hits++;
                     }
                 }
