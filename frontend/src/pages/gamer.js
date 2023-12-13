@@ -145,9 +145,11 @@ const Gamer = () => {
 			setWeekgameCoins(weekgameCoins+500);
 		
 
-			setTimeout(() => {
-				window.location.reload();
-			  }, 250);
+			inputNumber1.current.value=''
+			inputNumber2.current.value=''
+			inputNumber3.current.value=''
+			inputNumber4.current.value=''
+			inputNumber5.current.value=''
 		}
 	}
 

@@ -11,16 +11,6 @@ import Axios from 'axios';
   
     Cookies.set('name', inputName.current.value);
     Axios.get("http://localhost:3002/api/setdefault");
-    // Axios.get("http://localhost:3002/api/deletecupons");
-    // Axios.get("http://localhost:3002/api/deletebotcupons");
-    // Axios.get("http://localhost:3002/api/deleteoperatorcoins");
-    // Axios.get("http://localhost:3002/api/deleteusercoins");
-    // Axios.get("http://localhost:3002/api/deletweekcoins");
-    // Axios.get("http://localhost:3002/api/deletwinerhits");
-    // Axios.post("http://localhost:3002/api/defaultusercoins");
-    // Axios.post("http://localhost:3002/api/defaultoperatorcoins");
-    // Axios.post("http://localhost:3002/api/defaultweekcoins");
-    // Axios.post("http://localhost:3002/api/defaultwinerhits");
     
     window.location.href = "./gamer";
   }

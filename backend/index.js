@@ -21,17 +21,24 @@ app.get("/api/setdefault", (req,res)=>{
     sql_string += "DELETE FROM winer_hits;";
     sql_string += "DELETE FROM user_coins;";
     sql_string += "DELETE FROM bot_cupons;";
+    sql_string += "DELETE FROM curen_week;";
+    sql_string += "DELETE FROM winer_num;";
     sql_string += "INSERT INTO user_coins (usercoins) VALUES (10000);";
     sql_string += "INSERT INTO operator_coins (operatorcoins) VALUES (0);";
     sql_string += "INSERT INTO week_coins (weekcoins) VALUES (0);";
+    sql_string += "INSERT INTO curen_week (week) VALUES (0);";
     sql_string += "INSERT INTO winer_hits (twohits, threehits, foorhits, fivehits) VALUES (0,0,0,0);";
     db.query(sql_string, (err,result)=>{
-        if(err) {
+        if (err) {
             console.log(err)
-        } 
-        res.send(result)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
     });
-});
+})
 
 //Delete user cupons
 app.get("/api/deletecupons", (req,res)=>{
@@ -97,43 +104,59 @@ app.get("/api/deletwinerhits", (req,res)=>{
 let uservalue = 10000;
 app.post('/api/defaultusercoins', (req,res)=> {   
     db.query("INSERT INTO user_coins (usercoins) VALUES (?)",uservalue, (err,result)=>{
-    if(err) {
-       console.log(err)
-    } 
-    console.log(result)
-    });   
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
 })
 
 // Default operatorcoins
 let operatorvalue = 0;
 app.post('/api/defaultoperatorcoins', (req,res)=> {   
     db.query("INSERT INTO operator_coins (operatorcoins) VALUES (?)",operatorvalue, (err,result)=>{
-    if(err) {
-       console.log(err)
-    } 
-    console.log(result)
-    });   
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
 })
 
 // Default weekcoins
 let weekvalue = 0;
 app.post('/api/defaultweekcoins', (req,res)=> {   
     db.query("INSERT INTO week_coins (weekcoins) VALUES (?)",weekvalue, (err,result)=>{
-    if(err) {
-       console.log(err)
-    } 
-    console.log(result)
-    });   
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
 })
 
 // Default winerhits;
 app.post('/api/defaultwinerhits', (req,res)=> {   
     db.query("INSERT INTO winer_hits (twohits, threehits, foorhits, fivehits) VALUES (0,0,0,0)", (err,result)=>{
-    if(err) {
-       console.log(err)
-    } 
-    console.log(result)
-    });   
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
 })
 
 // User coins
@@ -172,12 +195,16 @@ app.post('/api/postusercoins',(req,res)=>{
     const operation = req.body.operation;
     const value = req.body.value;
     db.query((operation=="-"?"UPDATE user_coins SET usercoins = usercoins - ? WHERE usercoins = ?":"UPDATE user_coins SET usercoins = usercoins + ? WHERE usercoins = ?"),[value,usercoins], (err,result)=>{
-        if(err) {
-        console.log(err)
-        } 
-        console.log(result)
-    });    
-});
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
+})
 
 // Update operatorcoins
 app.post('/api/postoperatorcoins',(req,res)=>{
@@ -188,12 +215,16 @@ app.post('/api/postoperatorcoins',(req,res)=>{
     console.log(operation);
     console.log(value); 
     db.query((operation=="-"?"UPDATE operator_coins SET operatorcoins = operatorcoins - ? WHERE operatorcoins = ?":"UPDATE operator_coins SET operatorcoins = operatorcoins + ? WHERE operatorcoins = ?"),[value,operatorcoins], (err,result)=>{
-        if(err) {
-        console.log(err)
-        } 
-        console.log(result)
-    });    
-});
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
+})
 
 // Update weekcoins
 app.post('/api/postweekcoins',(req,res)=>{
@@ -204,12 +235,16 @@ app.post('/api/postweekcoins',(req,res)=>{
     console.log(operation);
     console.log(value);    
     db.query((operation=="-"?"UPDATE week_coins SET weekcoins = weekcoins - ? WHERE weekcoins = ?":"UPDATE week_coins SET weekcoins = weekcoins + ? WHERE weekcoins = ?"),[value,weekcoins], (err,result)=>{
-        if(err) {
-        console.log(err)
-        } 
-        console.log(result)
-    });    
-});
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
+})
 
 // User cupon insert
 app.post('/api/createnewcupon', (req,res)=> {   
@@ -219,11 +254,15 @@ app.post('/api/createnewcupon', (req,res)=> {
     const lotnum4 = req.body.num4;
     const lotnum5 = req.body.num5;
     db.query("INSERT INTO user_cupons (lotnum1, lotnum2, lotnum3, lotnum4, lotnum5) VALUES (?,?,?,?,?)",[lotnum1,lotnum2,lotnum3,lotnum4,lotnum5], (err,result)=>{
-    if(err) {
-       console.log(err)
-    } 
-    console.log(result)
-    });   
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
 })
 
 // Bot cupon insert
@@ -234,17 +273,35 @@ app.post('/api/createnewbotcupon', (req, res) => {
     const lotnum4 = req.body.num4;
     const lotnum5 = req.body.num5;
     db.query("INSERT INTO bot_cupons (lotnum1, lotnum2, lotnum3, lotnum4, lotnum5) VALUES (?,?,?,?,?)", [lotnum1, lotnum2, lotnum3, lotnum4, lotnum5], (err, result) => {
-        if (err) {
-            console.log(err)
-            res.send("Error")
-        }
-        else {
-            console.log(result)
-            res.send("ok")
-        }
+            if (err) {
+                console.log(err)
+                res.send("Error")
+            }
+            else {
+                console.log(result)
+                res.send("ok")
+            }
+        });
+    })
 
-    });
-})
+    // Winer num insert
+app.post('/api/winernum', (req, res) => {
+    const lotnum1 = req.body.num1;
+    const lotnum2 = req.body.num2;
+    const lotnum3 = req.body.num3;
+    const lotnum4 = req.body.num4;
+    const lotnum5 = req.body.num5;
+    db.query("INSERT INTO winer_num (lotnum1, lotnum2, lotnum3, lotnum4, lotnum5) VALUES (?,?,?,?,?)", [lotnum1, lotnum2, lotnum3, lotnum4, lotnum5], (err, result) => {
+            if (err) {
+                console.log(err)
+                res.send("Error")
+            }
+            else {
+                console.log(result)
+                res.send("ok")
+            }
+        });
+    })
 
 // Cuponlist send
 app.get("/api/cuponlist", (req,res)=>{
@@ -266,6 +323,26 @@ app.get("/api/botcuponlist", (req,res)=>{
     });   
 });
 
+// Winernumlist send
+app.get("/api/winernumlist", (req,res)=>{
+    db.query("SELECT * FROM winer_num", (err,result)=>{
+        if(err) {
+            console.log(err)
+        } 
+        res.send(result)
+    });   
+});
+
+// Cuponlist send
+app.get("/api/weeknum", (req,res)=>{
+    db.query("SELECT * FROM curen_week", (err,result)=>{
+        if(err) {
+            console.log(err)
+        } 
+        res.send(result)
+    });   
+});
+
 // Route to get one post
 app.get("/api/getFromId/:id", (req,res)=>{
 const id = req.params.id;
@@ -278,7 +355,19 @@ const id = req.params.id;
     );   
     });
 
-
+    // Update weeknum
+app.post('/api/weeknumupd',(req,res)=>{
+    db.query("UPDATE curen_week SET week = 1 WHERE week = 0", (err,result)=>{
+        if (err) {
+            console.log(err)
+            res.send("Error")
+        }
+        else {
+            console.log(result)
+            res.send("ok")
+        }
+    });
+})
 
 // Route to delete a post
 

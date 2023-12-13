@@ -9,16 +9,17 @@ const Operator = () => {
     //Previous sections object
 	const [cupList,setCupList] = useState([]);
     const [botcupList, setBotcupList] = useState([]);
+    const [winer_numbers, setWiner_numbers] = useState([]);
 
     const [playerCoins, setplayerCoins] = useState(0);
 	const [operatorCoins, setoperatorCoins] = useState(0);
 	const [weekgameCoins, setWeekgameCoins] = useState(0);
+    const [curentweeek, setCurentweeek] = useState(0);
     const [listItems, setListItems] = useState(null);
 
     const botplayer = useRef(null)
 	const tickets = useRef(null)
 
-    let winer_numbers =[];
     let usercontainer = [];
     let botcontainer = [];
 
@@ -31,6 +32,13 @@ const Operator = () => {
     let botthreehits = 0;
     let botfourhits = 0;
     let botfivehits = 0;
+
+
+    //Previous sections arrey
+	let inputCup =[];
+
+    //Previous sections arrey
+	let botCup =[];
 
     //useEffect with usercoin
 	useEffect(()=>{
@@ -49,18 +57,27 @@ const Operator = () => {
 	//useEffect with weekcoin
 	useEffect(()=>{
 		Axios.get("http://localhost:3002/api/weekcoins").then((coin)=>{
+            console.log(coin);
 			setWeekgameCoins(coin.data[0].weekcoins)
 		});
 	},[weekgameCoins.length])
+
+    //useEffect with curentweek
+	useEffect(()=>{
+		Axios.get("http://localhost:3002/api/weeknum").then((weeks)=>{
+			setCurentweeek(weeks.data[0].week)
+		});
+	},[curentweeek.length])
 
     //useEffect with database cupons
 	useEffect(()=>{
         Axios.get("http://localhost:3002/api/cuponlist").then((datas)=>{
             setCupList(datas.data)
         });
-        },[cupList.length])
+    },[cupList.length])
 
-        //useEffect with database cupons
+
+    //useEffect with database cupons
 	useEffect(()=>{
         Axios.get("http://localhost:3002/api/botcuponlist").then((datas)=>{
             setBotcupList(datas.data)
@@ -85,6 +102,39 @@ const Operator = () => {
         }return array;
     }
 
+    function winnumsend(){
+        let winernumbers = generator();
+        const handleSubmit1 = async () => {
+            try {
+                const response = await Axios.post("http://localhost:3002/api/winernum", {num1: winernumbers[0], num2: winernumbers[1], num3: winernumbers[2], num4: winernumbers[3], num5: winernumbers[4],}); 
+                console.log(response);
+                return true;
+            } catch (error) {
+                console.log(error);
+                return false
+            }
+        };
+        handleSubmit1();
+    }
+
+    function weeknumsend(){
+        const handleSubmit1 = async () => {
+            try {
+                const response = await Axios.post("http://localhost:3002/api/weeknumupd"); 
+                console.log(response);
+                return true;
+            } catch (error) {
+                console.log(error);
+                return false
+            }
+        };
+        Axios.get("http://localhost:3002/api/weeknum").then((weeks)=>{
+            console.log(weeks);
+			setCurentweeek(weeks.data[0].week)
+		});
+        handleSubmit1();
+    }
+
     function botlottogen(){
         for(let i=0; i<botplayer.current.value; i++){
             for(let j=0; j<tickets.current.value; j++){
@@ -100,9 +150,6 @@ const Operator = () => {
                         return false
                     }
                 };
-
-                
-                
                 handleSubmit1();
             }
         }
@@ -141,9 +188,31 @@ const Operator = () => {
 
     }
 
+    //Generate sections arrey
+	for (let i=0; i<cupList.length; i++) {	
+		inputCup = [...inputCup ,[cupList[i].lotnum1, cupList[i].lotnum2,
+		cupList[i].lotnum3, cupList[i].lotnum4, cupList[i].lotnum5]];
+	}
+
+    //Generate sections arrey
+	for (let i=0; i<botcupList.length; i++) {	
+		botCup = [...botCup ,[botcupList[i].lotnum1, botcupList[i].lotnum2,
+		botcupList[i].lotnum3, botcupList[i].lotnum4, botcupList[i].lotnum5]];
+	}
+    
+    function winnumreceive(){
+        Axios.get("http://localhost:3002/api/winernumlist").then((winnum)=>{
+                setWiner_numbers([...winer_numbers,[winnum.data[0].lotnum1, winnum.data[0].lotnum2,
+                    winnum.data[0].lotnum3, winnum.data[0].lotnum4, winnum.data[0].lotnum5]]);
+                    console.log(winer_numbers);
+        });
+    }
+
     function lottoLottery(){
-        winer_numbers = generator();
-        console.log(winer_numbers);
+        //winer_numbers = generator();
+        winnumsend();
+        winnumreceive();
+        weeknumsend();
         gamercupon();
         gamerprize();
         botcupon();
@@ -206,14 +275,45 @@ const Operator = () => {
             <h1>Operator coins:
             {operatorCoins}
             </h1>
-				<br></br>
+            {curentweeek==0 ? (<p></p>):(<button  /*onClick={lottoLottery}*/>New week</button>)}
 			<h1>
-            {listItems}
+            {curentweeek==0 ? (<p></p>):(<ul>
+                Winer numbers:
+          				{winer_numbers.map((array, index) => (
+            			<li key={index}>{array.join(", ")}</li>
+          				))}
+        			</ul>)}
+            </h1>
+			<h1>
 			</h1>
-            <input ref={botplayer} placeholder="How many botplayers?"></input>
-            <input ref={tickets} placeholder="How many lottery tickets?"></input>
-            <button  onClick={botcupongenerator}>Coupons general</button>
-            <button  onClick={lottoLottery}>Lottery</button>
+            {curentweeek==0 ? (<input ref={botplayer} placeholder="How many botplayers?"></input>):(<p></p>)}
+            {curentweeek==0 ? (<input ref={tickets} placeholder="How many lottery tickets?"></input>):(<p></p>)}
+            {curentweeek==0 ? (<button  onClick={botcupongenerator}>Coupons general</button>):(<p></p>)}
+            {curentweeek==0 ? (<button  onClick={lottoLottery}>Lottery</button>):(<p></p>)}
+            
+            <h1>
+            Cupons:
+
+			 	{inputCup.length > 0 ? (
+        			<ul>
+          				{inputCup.map((array, index) => (
+            			<li key={index}>{array.join(", ")} Player</li>
+          				))}
+        			</ul>
+      				) : (
+        <p>No player cupons</p>
+      )} 
+			
+            {botCup.length > 0 ? (
+                    <ul>
+                    {botCup.map((array, index) => (
+                        <li key={index}>{array.join(", ")} Generate</li>
+                ))}
+                </ul>
+                ) : (
+                    <p>No generate cupons</p>
+                )} 
+            </h1>
 		</div>
 	);
 };
