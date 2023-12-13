@@ -24,18 +24,10 @@ const Operator = () => {
     let usercontainer = [];
     let botcontainer = [];
 
-    
-
-    let playtwohits = 0;
-    let playthreehits = 0;
-    let playfourhits = 0;
-    let playfivehits = 0;
-
-    let bottwohits = 0;
-    let botthreehits = 0;
-    let botfourhits = 0;
-    let botfivehits = 0;
-
+    let fiveHits = 0;
+    let foorHits = 0;
+    let threeHits = 0;
+    let twoHits = 0;
 
     //Previous sections arrey
 	let inputCup =[];
@@ -93,10 +85,8 @@ const Operator = () => {
 
     
     //useEffect with database winernum
-    console.log(reloadflag);
     useEffect(()=>{
             if(curentweeek == 1 && reloadflag == 1){
-                console.log("alma");
             Axios.get("http://localhost:3002/api/winernumlist").then((datas)=>{
                 setWinernumbersList(datas.data)
             })};
@@ -166,17 +156,48 @@ const Operator = () => {
             }
         };
         Axios.get("http://localhost:3002/api/loadflag").then((loads)=>{
-            console.log(loads);
 			setReloadflag(loads.data[0].loads)
 		});
         handleSubmit1();
+    }
+
+    function userhits(lotnum1, lotnum2, lotnum3, lotnum4, lotnum5, lotteryresult, prize){
+        
+                const handleSubmit1 = async () => {
+                    try {
+                        const response = await Axios.post("http://localhost:3002/api/wineruser", {num1: lotnum1, num2: lotnum2, num3: lotnum3, num4: lotnum4, num5: lotnum5, lottresult: lotteryresult, prizes: prize,}); 
+                        console.log(response);
+                        return true;
+                    } catch (error) {
+                        console.log(error);
+                        return false
+                    }
+                };
+                handleSubmit1();
+            
+        
+    }
+
+    function operatorhits(lotnum1, lotnum2, lotnum3, lotnum4, lotnum5, lotteryresult, prize){
+        const handleSubmit1 = async () => {
+            try {
+                const response = await Axios.post("http://localhost:3002/api/wineroperator", {num1: lotnum1, num2: lotnum2, num3: lotnum3, num4: lotnum4, num5: lotnum5, lottresult: lotteryresult, prizes: prize,}); 
+                console.log(response);
+                return true;
+            } catch (error) {
+                console.log(error);
+                return false
+            }
+        };
+        handleSubmit1();
+    
+
     }
 
     function botlottogen(){
         for(let i=0; i<botplayer.current.value; i++){
             for(let j=0; j<tickets.current.value; j++){
                 let container = generator();
-                console.log(container);
                 const handleSubmit1 = async () => {
                     try {
                         const response = await Axios.post("http://localhost:3002/api/createnewbotcupon", {num1: container[0], num2: container[1], num3: container[2], num4: container[3], num5: container[4],}); 
@@ -196,7 +217,6 @@ const Operator = () => {
         botlottogen();
 
 		let addition ="+"
-        console.log(botplayer.current.value)
 		let value = ((botplayer.current.value)*(tickets.current.value)*500);
 
 		const handleSubmit1 = async () => {
@@ -219,9 +239,9 @@ const Operator = () => {
 
         handleSubmit1();
         handleSubmit2();
-         setTimeout(() => {
-             window.location.reload();
-           }, 500);
+        setTimeout(() => {
+            window.location.reload();
+          }, 250);
 
     }
 
@@ -248,25 +268,20 @@ const Operator = () => {
         reloadsend();
         weeknumsend();
         hitssum();
-
         gamercupon();
         botcupon();
-
         gamerprize();
         botprize();
-        setTimeout(() => {
-            window.location.reload();
-          }, 50);
     }
 
     
 
     function hitssum(){
         let hitsBase = weekgameCoins*0.9;
-        let fiveHits = parseInt(hitsBase*0.6);
-        let foorHits = parseInt(hitsBase*0.2);
-        let threeHits = parseInt(hitsBase*0.15);
-        let twoHits = parseInt(hitsBase*0.05);
+        fiveHits = parseInt(hitsBase*0.6);
+        foorHits = parseInt(hitsBase*0.2);
+        threeHits = parseInt(hitsBase*0.15);
+        twoHits = parseInt(hitsBase*0.05);
         let totalHits = fiveHits+foorHits+threeHits+twoHits;
         const handleSubmit1 = async () => {
 			try {
@@ -277,9 +292,34 @@ const Operator = () => {
 			}
 		};
         handleSubmit1();
+    }
 
+    function userpay(pay){
+        let addition ="+"
+        const handleSubmit = async () => {
+            try {
+              const response = await Axios.post("http://localhost:3002/api/postusercoins", {usercoins: playerCoins, operation: addition, value: pay,});
+              console.log(response);
+            } catch (error) {
+              console.log(error);
+            }
+        };
+        handleSubmit();
+        setplayerCoins(playerCoins+pay);    
+    }
 
-
+    function operatorpay(pay){
+        let subtraction ="-";
+        const handleSubmit = async () => {
+            try {
+              const response = await Axios.post("http://localhost:3002/api/postoperatorcoins", {operatorcoins: operatorCoins, operation: subtraction, value: pay,});
+              console.log(response);
+            } catch (error) {
+              console.log(error);
+            }
+        };
+        handleSubmit();
+        setoperatorCoins(operatorCoins-pay);
     }
 
     function gamercupon(){
@@ -307,10 +347,30 @@ const Operator = () => {
                 }
                 
             }
-            if(hits==2)playtwohits++;
-            if(hits==3)playthreehits++;
-            if(hits==4)playfourhits++;
-            if(hits==5)playfivehits++;
+            if(hits==2){
+                userhits(usercontainer[i][0], usercontainer[i][1], usercontainer[i][2], usercontainer[i][3], usercontainer[i][4], 2, twoHits);
+                operatorhits(usercontainer[i][0], usercontainer[i][1], usercontainer[i][2], usercontainer[i][3], usercontainer[i][4], 2, twoHits);
+                operatorpay(twoHits);
+                userpay(twoHits);
+            }
+            if(hits==3){
+                userhits(usercontainer[i][0], usercontainer[i][1], usercontainer[i][2], usercontainer[i][3], usercontainer[i][4], 3, threeHits);
+                operatorhits(usercontainer[i][0], usercontainer[i][1], usercontainer[i][2], usercontainer[i][3], usercontainer[i][4], 3, threeHits);
+                operatorpay(threeHits);
+                userpay(threeHits);
+            }
+            if(hits==4){
+                userhits(usercontainer[i][0], usercontainer[i][1], usercontainer[i][2], usercontainer[i][3], usercontainer[i][4], 3, foorHits);
+                operatorhits(usercontainer[0], usercontainer[i][1], usercontainer[i][2], usercontainer[i][3], usercontainer[i][4], 3, foorHits);
+                operatorpay(foorHits);
+                userpay(foorHits);
+            }
+            if(hits==5){
+                userhits(usercontainer[i][0], usercontainer[i][1], usercontainer[i][2], usercontainer[i][3], usercontainer[i][4], 5, fiveHits);
+                operatorhits(usercontainer[i][0], usercontainer[i][1], usercontainer[i][2], usercontainer[i][3], usercontainer[i][4], 5, fiveHits);
+                operatorpay(fiveHits);
+                userpay(fiveHits);
+            }
         }
     }
 
@@ -325,10 +385,22 @@ const Operator = () => {
                 }
                 
             }
-            if(hits==2)bottwohits++;
-            if(hits==3)botthreehits++;
-            if(hits==4)botfourhits++;
-            if(hits==5)botfivehits++;
+            if(hits==2){
+                operatorhits(botcontainer[i][0], botcontainer[i][1], botcontainer[i][2], botcontainer[i][3], botcontainer[i][4], 2, twoHits);
+                operatorpay(twoHits);
+            }
+            if(hits==3){
+                operatorhits(botcontainer[i][0], botcontainer[i][1], botcontainer[i][2], botcontainer[i][3], botcontainer[i][4], 3, threeHits);
+                operatorpay(threeHits);
+            }
+            if(hits==4){
+                operatorhits(botcontainer[i][0], botcontainer[i][1], botcontainer[i][2], botcontainer[i][3], botcontainer[i][4], 3, foorHits);
+                operatorpay(foorHits);
+            }
+            if(hits==5){
+                operatorhits(botcontainer[i][0], botcontainer[i][1], botcontainer[i][2], botcontainer[i][3], botcontainer[i][4], 5, fiveHits);
+                operatorpay(fiveHits);
+            }
         }
     }
 

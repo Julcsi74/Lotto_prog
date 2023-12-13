@@ -23,6 +23,8 @@ app.get("/api/setdefault", (req,res)=>{
     sql_string += "DELETE FROM curen_week;";
     sql_string += "DELETE FROM load_flag;";
     sql_string += "DELETE FROM winer_num;";
+    sql_string += "DELETE FROM user_hits;";
+    sql_string += "DELETE FROM operator_hits;";
     sql_string += "INSERT INTO user_coins (usercoins) VALUES (10000);";
     sql_string += "INSERT INTO operator_coins (operatorcoins) VALUES (0);";
     sql_string += "INSERT INTO week_coins (weekcoins) VALUES (0);";
@@ -283,6 +285,48 @@ app.post('/api/createnewbotcupon', (req, res) => {
             }
         });
     })
+
+    // winer user cupon insert
+    app.post('/api/wineruser', (req, res) => {
+    const lotnum1 = req.body.num1;
+    const lotnum2 = req.body.num2;
+    const lotnum3 = req.body.num3;
+    const lotnum4 = req.body.num4;
+    const lotnum5 = req.body.num5;
+    const lottresult = req.body.lottresult;
+    const prize = req.body.prizes;
+    db.query("INSERT INTO user_hits (lotnum1, lotnum2, lotnum3, lotnum4, lotnum5, lottresult, prize) VALUES (?,?,?,?,?,?,?)", [lotnum1, lotnum2, lotnum3, lotnum4, lotnum5, lottresult, prize], (err, result) => {
+            if (err) {
+                console.log(err)
+                res.send("Error")
+            }
+            else {
+                console.log(result)
+                res.send("ok")
+            }
+        });
+    })
+
+    // winer sum cupon insert
+    app.post('/api/wineroperator', (req, res) => {
+        const lotnum1 = req.body.num1;
+        const lotnum2 = req.body.num2;
+        const lotnum3 = req.body.num3;
+        const lotnum4 = req.body.num4;
+        const lotnum5 = req.body.num5;
+        const lottresult = req.body.lottresult;
+        const prize = req.body.prizes;
+        db.query("INSERT INTO operator_hits (lotnum1, lotnum2, lotnum3, lotnum4, lotnum5, lottresult, prize) VALUES (?,?,?,?,?,?,?)", [lotnum1, lotnum2, lotnum3, lotnum4, lotnum5, lottresult, prize], (err, result) => {
+                if (err) {
+                    console.log(err)
+                    res.send("Error")
+                }
+                else {
+                    console.log(result)
+                    res.send("ok")
+                }
+            });
+        })
 
     // Winer num insert
 app.post('/api/winernum', (req, res) => {
