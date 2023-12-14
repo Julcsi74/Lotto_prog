@@ -357,6 +357,26 @@ app.get("/api/cuponlist", (req,res)=>{
     });   
 });
 
+// winer Cuponlist send
+app.get("/api/winercuponlist", (req,res)=>{
+    db.query("SELECT * FROM user_hits", (err,result)=>{
+        if(err) {
+            console.log(err)
+        } 
+        res.send(result)
+    });   
+});
+
+// all winer Cuponlist send
+app.get("/api/allcuponlist", (req,res)=>{
+    db.query("SELECT * FROM operator_hits", (err,result)=>{
+        if(err) {
+            console.log(err)
+        } 
+        res.send(result)
+    });   
+});
+
 // Cuponlist send
 app.get("/api/botcuponlist", (req,res)=>{
     db.query("SELECT * FROM bot_cupons", (err,result)=>{

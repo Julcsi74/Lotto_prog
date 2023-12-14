@@ -25,10 +25,6 @@ function App() {
 					element={<Gamer />}
 				/>
 				<Route path="/prizes" element={<Winerprize />} />
-				<Route
-					path="/sign-up"
-					element={<SignUp />}
-				/>
 			</Routes>
 		</Router>
 	);

@@ -10,7 +10,7 @@ import Axios from 'axios';
   function newGame() {
   
     Cookies.set('name', inputName.current.value);
-    Axios.get("http://localhost:3002/api/setdefault");
+    Axios.get("http://88.209.213.195:3002/api/setdefault");
     
     window.location.href = "./gamer";
   }

@@ -38,21 +38,21 @@ const Gamer = () => {
 
 	//useEffect with usercoin
 	useEffect(()=>{
-		Axios.get("http://localhost:3002/api/usercoint").then((coin)=>{
+		Axios.get("http://88.209.213.195:3002/api/usercoint").then((coin)=>{
 			setplayerCoins(coin.data[0].usercoins)
 		});
 	},[playerCoins.length])
 
 	//useEffect with operatorcoin
 	useEffect(()=>{
-		Axios.get("http://localhost:3002/api/operatorcoins").then((coin)=>{
+		Axios.get("http://88.209.213.195:3002/api/operatorcoins").then((coin)=>{
 			setoperatorCoins(coin.data[0].operatorcoins)
 		});
 	},[operatorCoins.length])
 
 	//useEffect with operatorcoin
 	useEffect(()=>{
-		Axios.get("http://localhost:3002/api/weekcoins").then((coin)=>{
+		Axios.get("http://88.209.213.195:3002/api/weekcoins").then((coin)=>{
 			setWeekgameCoins(coin.data[0].weekcoins)
 		});
 	},[weekgameCoins.length])
@@ -60,14 +60,14 @@ const Gamer = () => {
 
 	//useEffect with database cupons
 	useEffect(()=>{
-	Axios.get("http://localhost:3002/api/cuponlist").then((datas)=>{
+	Axios.get("http://88.209.213.195:3002/api/cuponlist").then((datas)=>{
 		setCupList(datas.data)
 	});
 	},[cupList.length])
 
 	//useEffect with curentweek
 	useEffect(()=>{
-		Axios.get("http://localhost:3002/api/weeknum").then((weeks)=>{
+		Axios.get("http://88.209.213.195:3002/api/weeknum").then((weeks)=>{
 			setCurentweeek(weeks.data[0].week)
 		});
 	},[curentweeek.length])
@@ -109,7 +109,7 @@ const Gamer = () => {
 
 			const handleSubmit1 = async () => {
 				try {
-				  const response = await Axios.post("http://localhost:3002/api/postusercoins", {usercoins: playerCoins, operation: subtraction, value: value,});
+				  const response = await Axios.post("http://88.209.213.195:3002/api/postusercoins", {usercoins: playerCoins, operation: subtraction, value: value,});
 				  console.log(response);
 				} catch (error) {
 				  console.log(error);
@@ -118,7 +118,7 @@ const Gamer = () => {
 
 			const handleSubmit2 = async () => {
 				try {
-				  const response = await Axios.post("http://localhost:3002/api/postoperatorcoins", {operatorcoins: operatorCoins, operation: addition, value: value,});
+				  const response = await Axios.post("http://88.209.213.195:3002/api/postoperatorcoins", {operatorcoins: operatorCoins, operation: addition, value: value,});
 				  console.log(response);
 				} catch (error) {
 				  console.log(error);
@@ -127,7 +127,7 @@ const Gamer = () => {
 
 			const handleSubmit3 = async () => {
 				try {
-				  const response = await Axios.post("http://localhost:3002/api/postweekcoins", {weekcoins: weekgameCoins, operation: addition, value: value,});
+				  const response = await Axios.post("http://88.209.213.195:3002/api/postweekcoins", {weekcoins: weekgameCoins, operation: addition, value: value,});
 				  console.log(response);
 				} catch (error) {
 				  console.log(error);
@@ -136,7 +136,7 @@ const Gamer = () => {
 
 			const handleSubmit4 = async () => {
 				try {
-				  const response = await Axios.post("http://localhost:3002/api/createnewcupon", {num1: inputNumber1.current.value, num2: inputNumber2.current.value, num3: inputNumber3.current.value, num4: inputNumber4.current.value, num5: inputNumber5.current.value,}); 
+				  const response = await Axios.post("http://88.209.213.195:3002/api/createnewcupon", {num1: inputNumber1.current.value, num2: inputNumber2.current.value, num3: inputNumber3.current.value, num4: inputNumber4.current.value, num5: inputNumber5.current.value,}); 
 				  console.log(response);
 				} catch (error) {
 				  console.log(error);
@@ -153,11 +153,9 @@ const Gamer = () => {
 			setWeekgameCoins(weekgameCoins+500);
 		
 
-			inputNumber1.current.value=''
-			inputNumber2.current.value=''
-			inputNumber3.current.value=''
-			inputNumber4.current.value=''
-			inputNumber5.current.value=''
+			setTimeout(() => {
+				window.location.reload();
+			  }, 250);
 		}
 	}
 

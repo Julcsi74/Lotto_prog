@@ -36,49 +36,49 @@ const Operator = () => {
 
     //useEffect with usercoin
 	useEffect(()=>{
-		Axios.get("http://localhost:3002/api/usercoint").then((coin)=>{
+		Axios.get("http://88.209.213.195:3002/api/usercoint").then((coin)=>{
 			setplayerCoins(coin.data[0].usercoins)
 		});
 	},[playerCoins.length])
 
 	//useEffect with operatorcoin
     useEffect(()=>{
-		Axios.get("http://localhost:3002/api/operatorcoins").then((coin)=>{
+		Axios.get("http://88.209.213.195:3002/api/operatorcoins").then((coin)=>{
 			setoperatorCoins(coin.data[0].operatorcoins)
 		});
 	},[operatorCoins.length])
 
 	//useEffect with weekcoin
 	useEffect(()=>{
-		Axios.get("http://localhost:3002/api/weekcoins").then((coin)=>{
+		Axios.get("http://88.209.213.195:3002/api/weekcoins").then((coin)=>{
 			setWeekgameCoins(coin.data[0].weekcoins)
 		});
 	},[weekgameCoins.length])
 
     //useEffect with curentweek
 	useEffect(()=>{
-		Axios.get("http://localhost:3002/api/weeknum").then((weeks)=>{
+		Axios.get("http://88.209.213.195:3002/api/weeknum").then((weeks)=>{
 			setCurentweeek(weeks.data[0].week)
 		});
 	},[curentweeek.length])
 
     //useEffect with curentweek
 	useEffect(()=>{
-		Axios.get("http://localhost:3002/api/loadflag").then((loads)=>{
+		Axios.get("http://88.209.213.195:3002/api/loadflag").then((loads)=>{
 			setReloadflag(loads.data[0].loads)
 		});
 	},[reloadflag.length])
 
     //useEffect with database cupons
 	useEffect(()=>{
-        Axios.get("http://localhost:3002/api/botcuponlist").then((datas)=>{
+        Axios.get("http://88.209.213.195:3002/api/botcuponlist").then((datas)=>{
             setBotcupList(datas.data)
         });
     },[botcupList.length])
     
     //useEffect with database cupons
 	useEffect(()=>{
-        Axios.get("http://localhost:3002/api/cuponlist").then((datas)=>{
+        Axios.get("http://88.209.213.195:3002/api/cuponlist").then((datas)=>{
             setCupList(datas.data)
         });
     },[cupList.length])
@@ -87,7 +87,7 @@ const Operator = () => {
     //useEffect with database winernum
     useEffect(()=>{
             if(curentweeek == 1 && reloadflag == 1){
-            Axios.get("http://localhost:3002/api/winernumlist").then((datas)=>{
+            Axios.get("http://88.209.213.195:3002/api/winernumlist").then((datas)=>{
                 setWinernumbersList(datas.data)
             })};
         },[reloadflag])
@@ -116,7 +116,7 @@ const Operator = () => {
         //winer_numbers = winernumbers;
         const handleSubmit1 = async () => {
             try {
-                const response = await Axios.post("http://localhost:3002/api/winernum", {num1: winer_numbers[0], num2: winer_numbers[1], num3: winer_numbers[2], num4: winer_numbers[3], num5: winer_numbers[4],}); 
+                const response = await Axios.post("http://88.209.213.195:3002/api/winernum", {num1: winer_numbers[0], num2: winer_numbers[1], num3: winer_numbers[2], num4: winer_numbers[3], num5: winer_numbers[4],}); 
                 console.log(response);
                 return true;
             } catch (error) {
@@ -130,7 +130,7 @@ const Operator = () => {
     function weeknumsend(){
         const handleSubmit1 = async () => {
             try {
-                const response = await Axios.post("http://localhost:3002/api/weeknumupd"); 
+                const response = await Axios.post("http://88.209.213.195:3002/api/weeknumupd"); 
                 console.log(response);
                 return true;
             } catch (error) {
@@ -138,7 +138,7 @@ const Operator = () => {
                 return false
             }
         };
-        Axios.get("http://localhost:3002/api/weeknum").then((weeks)=>{
+        Axios.get("http://88.209.213.195:3002/api/weeknum").then((weeks)=>{
 			setCurentweeek(weeks.data[0].week)
 		});
         handleSubmit1();
@@ -147,7 +147,7 @@ const Operator = () => {
     function reloadsend(){
         const handleSubmit1 = async () => {
             try {
-                const response = await Axios.post("http://localhost:3002/api/loadflagupd"); 
+                const response = await Axios.post("http://88.209.213.195:3002/api/loadflagupd"); 
                 console.log(response);
                 return true;
             } catch (error) {
@@ -155,7 +155,7 @@ const Operator = () => {
                 return false
             }
         };
-        Axios.get("http://localhost:3002/api/loadflag").then((loads)=>{
+        Axios.get("http://88.209.213.195:3002/api/loadflag").then((loads)=>{
 			setReloadflag(loads.data[0].loads)
 		});
         handleSubmit1();
@@ -165,7 +165,7 @@ const Operator = () => {
         
                 const handleSubmit1 = async () => {
                     try {
-                        const response = await Axios.post("http://localhost:3002/api/wineruser", {num1: lotnum1, num2: lotnum2, num3: lotnum3, num4: lotnum4, num5: lotnum5, lottresult: lotteryresult, prizes: prize,}); 
+                        const response = await Axios.post("http://88.209.213.195:3002/api/wineruser", {num1: lotnum1, num2: lotnum2, num3: lotnum3, num4: lotnum4, num5: lotnum5, lottresult: lotteryresult, prizes: prize,}); 
                         console.log(response);
                         return true;
                     } catch (error) {
@@ -181,7 +181,7 @@ const Operator = () => {
     function operatorhits(lotnum1, lotnum2, lotnum3, lotnum4, lotnum5, lotteryresult, prize){
         const handleSubmit1 = async () => {
             try {
-                const response = await Axios.post("http://localhost:3002/api/wineroperator", {num1: lotnum1, num2: lotnum2, num3: lotnum3, num4: lotnum4, num5: lotnum5, lottresult: lotteryresult, prizes: prize,}); 
+                const response = await Axios.post("http://88.209.213.195:3002/api/wineroperator", {num1: lotnum1, num2: lotnum2, num3: lotnum3, num4: lotnum4, num5: lotnum5, lottresult: lotteryresult, prizes: prize,}); 
                 console.log(response);
                 return true;
             } catch (error) {
@@ -200,7 +200,7 @@ const Operator = () => {
                 let container = generator();
                 const handleSubmit1 = async () => {
                     try {
-                        const response = await Axios.post("http://localhost:3002/api/createnewbotcupon", {num1: container[0], num2: container[1], num3: container[2], num4: container[3], num5: container[4],}); 
+                        const response = await Axios.post("http://88.209.213.195:3002/api/createnewbotcupon", {num1: container[0], num2: container[1], num3: container[2], num4: container[3], num5: container[4],}); 
                         console.log(response);
                         return true;
                     } catch (error) {
@@ -221,7 +221,7 @@ const Operator = () => {
 
 		const handleSubmit1 = async () => {
 			try {
-			    const response1 = await Axios.post("http://localhost:3002/api/postoperatorcoins", {operatorcoins: operatorCoins, operation: addition, value: value,});
+			    const response1 = await Axios.post("http://88.209.213.195:3002/api/postoperatorcoins", {operatorcoins: operatorCoins, operation: addition, value: value,});
 			    console.log(response1);
 			} catch (error) {
 			    console.log(error);
@@ -230,7 +230,7 @@ const Operator = () => {
 
         const handleSubmit2 = async () => {
             try {
-              const response = await Axios.post("http://localhost:3002/api/postweekcoins", {weekcoins: weekgameCoins, operation: addition, value: value,});
+              const response = await Axios.post("http://88.209.213.195:3002/api/postweekcoins", {weekcoins: weekgameCoins, operation: addition, value: value,});
               console.log(response);
             } catch (error) {
               console.log(error);
@@ -272,6 +272,7 @@ const Operator = () => {
         botcupon();
         gamerprize();
         botprize();
+        window.location.href = "./prizes";
     }
 
     
@@ -285,7 +286,7 @@ const Operator = () => {
         let totalHits = fiveHits+foorHits+threeHits+twoHits;
         const handleSubmit1 = async () => {
 			try {
-			    const response = await Axios.post("http://localhost:3002/api/createwinerhits", {fivehits: fiveHits, foorhits: foorHits, threehits: threeHits, twohits: twoHits, totalhits: totalHits,});
+			    const response = await Axios.post("http://88.209.213.195:3002/api/createwinerhits", {fivehits: fiveHits, foorhits: foorHits, threehits: threeHits, twohits: twoHits, totalhits: totalHits,});
 			    console.log(response);
 			} catch (error) {
 			    console.log(error);
@@ -298,7 +299,7 @@ const Operator = () => {
         let addition ="+"
         const handleSubmit = async () => {
             try {
-              const response = await Axios.post("http://localhost:3002/api/postusercoins", {usercoins: playerCoins, operation: addition, value: pay,});
+              const response = await Axios.post("http://88.209.213.195:3002/api/postusercoins", {usercoins: playerCoins, operation: addition, value: pay,});
               console.log(response);
             } catch (error) {
               console.log(error);
@@ -312,7 +313,7 @@ const Operator = () => {
         let subtraction ="-";
         const handleSubmit = async () => {
             try {
-              const response = await Axios.post("http://localhost:3002/api/postoperatorcoins", {operatorcoins: operatorCoins, operation: subtraction, value: pay,});
+              const response = await Axios.post("http://88.209.213.195:3002/api/postoperatorcoins", {operatorcoins: operatorCoins, operation: subtraction, value: pay,});
               console.log(response);
             } catch (error) {
               console.log(error);
